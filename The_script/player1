@@ -1,0 +1,36 @@
+#include "SoftwareSerial.h"
+#include "DFRobotDFPlayerMini.h"
+
+// Set up a new software serial port on pins 10 (RX) and 11 (TX)
+SoftwareSerial mySoftwareSerial(10, 11); 
+DFRobotDFPlayerMini myDFPlayer;
+
+void setup() {
+  // The DFPlayer communicates at 9600 baud
+  mySoftwareSerial.begin(9600);
+  
+  // Open the terminal at 9600 to see debugging messages
+  Serial.begin(9600);
+  
+  Serial.println("Initializing DFPlayer... (May take 3~5 seconds)");
+
+  // Start the DFPlayer
+  if (!myDFPlayer.begin(mySoftwareSerial)) {
+    Serial.println("Error: Check connections or insert SD card.");
+    while(true); // Stop the program if it fails
+  }
+  
+  Serial.println("DFPlayer Mini online! Playing Bad Apple...");
+
+  // Set the volume (Range is 0 to 30)
+  // Start at 15 so you don't blow out the 0.5W speaker immediately
+  myDFPlayer.volume(15);  
+  
+  // Play the first file in the mp3 folder (0001.mp3)
+  myDFPlayer.play(1);     
+}
+
+void loop() {
+  // Nothing needed in the loop for a simple test. 
+  // The song will play in the background.
+}
